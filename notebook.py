@@ -23,7 +23,7 @@
 # #### Package Imports
 # We will keep coming back to this cell to add "import" statements, and configure libraries as we need
 
-# In[1]:
+# In[ ]:
 
 
 # Common imports
@@ -54,44 +54,56 @@ plt.style.use("bmh")
 # 
 # Make sure you name the variable `housing` and that you use the appropriate pandas method to load the data.
 
-# In[2]:
+# In[ ]:
 
 
 # 💻 Import the dataset in the project (data/housing.csv) into a dataframe called (housing)
+housing = pd.read_csv('data/housing.csv')
 
 
 # ### Task 2: Confirm the data was loaded correctly
 
 # #### 2.1: Get the first 6 records of the dataset
 
-# In[3]:
+# In[ ]:
 
 
 # 💻 Get the first 6 records of the dataframe
+housing.head(6)
 
 
 # #### 2.2: Get the last 7 records of the dataset
 
-# In[4]:
+# In[ ]:
 
 
 # 💻 Get the last 7 records of the dataframe
+housing.tail(7)
+
+
+# In[ ]:
+
+
+# CELL INDEX: 13
+# 💻 Get a random 10 records of the dataframe
+housing.sample(10)
 
 
 # #### 2.3: Get a random sample of 10 records
 
-# In[5]:
+# In[ ]:
 
 
-# 💻 Get a random 10 records of the dataframe
+housing.sample(10)
 
 
 # #### 2.4: Get information about the dataset, including the number of rows, number of columns, column names, and data types of each column
 
-# In[6]:
+# In[ ]:
 
 
 # 💻 Show information about the different data columns (columns, data types, ...etc.)
+housing.info()
 
 
 # > 🚩 This is a good point to commit your code to your repository.
@@ -104,25 +116,37 @@ plt.style.use("bmh")
 # 
 #   ![Data types](https://miro.medium.com/max/1400/1*kySPZcf83qLOuaqB1vJxlg.jpeg)
 # </details>
-Longitude:          💻:
-Latitude:           💻:
-Housing Median Age: 💻:
-Total Rooms:        💻:
-Total Bedrooms:     💻:
-Population:         💻:
-Households:         💻:
-Median Income:      💻:
-Median House Value: 💻:
-Ocean Proximity:    💻:
+
+# Longitude:          Numerical-Continuous
+# 
+# Latitude:           Numerical-Continuous
+# 
+# Housing Median Age: Numerical-Continuous
+# 
+# Total Rooms:        Numerical-Discrete
+# 
+# Total Bedrooms:     Numerical-Discrete
+# 
+# Population:         Numerical-Discrete
+# 
+# Households:         Numerical-Discrete
+# 
+# Median Income:      Numerical-Continuous
+# 
+# Median House Value: Numerical-Continuous
+# 
+# Ocean Proximity:    Categorical-Nominal
+
 # > 🚩 This is a good point to commit your code to your repository.
 
 # ### Task 4: Understand the data
 # #### 4.1: Get the summary statistics for the numerical columns
 
-# In[7]:
+# In[ ]:
 
 
 # 💻 Show the descriptive statistics information about the columns in the data frame
+housing.describe()
 
 
 # #### 4.2: For the categorical columns, get the frequency counts for each category
@@ -133,10 +157,11 @@ Ocean Proximity:    💻:
 #   - Use the `value_counts()` method on the categorical columns
 # </details>
 
-# In[8]:
+# In[ ]:
 
 
 # 💻 Show the frequency of the values in the ocean_proximity column
+housing['ocean_proximity'].value_counts()
 
 
 # > 🚩 This is a good point to commit your code to your repository.
@@ -146,19 +171,24 @@ Ocean Proximity:    💻:
 # #### 5.1: Visualize the distribution of the numerical columns
 # In a single figure, plot the histograms for all the numerical columns. Use a bin size of 50 for the histograms
 
-# In[9]:
+# In[ ]:
 
 
-# 💻 Plot a histogram of all the data features( with a bin size of 50)
+housing.hist(bins=50, figsize=(20, 15))
+plt.show()
 
 
 # #### 5.2: Visualize the distribution of only one column
 # Plot the histogram for the `median_income` column. Use a bin size of 50 for the histogram
 
-# In[10]:
+# In[ ]:
 
 
-# 💻 plot a histogram of only the median_income
+housing['median_income'].hist(bins=50, figsize=(10, 6))
+plt.xlabel('Median Income')
+plt.ylabel('Frequency')
+plt.title('Histogram of Median Income')
+plt.show()
 
 
 # > 🚩 This is a good point to commit your code to your repository.
@@ -169,16 +199,26 @@ Ocean Proximity:    💻:
 # 
 # Try this twice, once setting the `alpha` parameter to set the transparency of the points to 0.1, and once without setting the `alpha` parameter.
 
-# In[11]:
+# In[ ]:
 
 
-# 💻 scatter plat without alpha
+# 💻 scatter plot without alpha
+housing.plot(kind='scatter', x='longitude', y='latitude')
+plt.xlabel('Longitude')
+plt.ylabel('Latitude')
+plt.title('Scatter plot of house locations')
+plt.show()
 
 
-# In[12]:
+# In[ ]:
 
 
-# 💻 scatter plat with alpha
+# 💻 scatter plot with alpha
+housing.plot(kind='scatter', x='longitude', y='latitude', alpha=0.1)
+plt.xlabel('Longitude')
+plt.ylabel('Latitude')
+plt.title('Scatter plot of house locations with alpha')
+plt.show()
 
 
 # > 🚩 This is a good point to commit your code to your repository.
@@ -187,10 +227,22 @@ Ocean Proximity:    💻:
 # 
 # (📜 Check out the examples on their docs)[https://plotly.com/python/scatter-plots-on-maps/]
 
-# In[13]:
+# In[ ]:
 
 
-# 💻💯✨ Plot the data on a map of California
+get_ipython().run_line_magic('pip', 'install plotly')
+
+import plotly.express as px
+
+# Create a scatter mapbox plot
+fig = px.scatter_mapbox(housing, lat="latitude", lon="longitude", 
+                        color="median_house_value", size="population",
+                        color_continuous_scale=px.colors.cyclical.IceFire, size_max=15, zoom=5,
+                        mapbox_style="carto-positron",
+                        title="Housing Data in California")
+
+# Show the plot
+fig.show()
 
 
 # > 🚩 This is a good point to commit your code to your repository.
@@ -199,19 +251,22 @@ Ocean Proximity:    💻:
 
 # #### 6.1: Generate a correlation matrix for the numerical columns
 
-# In[14]:
+# In[ ]:
 
 
-# 💻 Get the correlation matrix of the housing data
+# 💻 Get the correlation matrix of the housing data excluding the 'ocean_proximity' column
+correlation_matrix = housing.drop('ocean_proximity', axis=1).corr()
+correlation_matrix
 
 
 # #### 6.2: Get the Correlation data fro the `median_house_age` column
 # sort the results in descending order
 
-# In[15]:
+# In[ ]:
 
 
 # 💻 Get the correlation data for just the median_house_age
+correlation_matrix["housing_median_age"].sort_values(ascending=False)
 
 
 # #### 6.2: Visualize the correlation matrix using a heatmap
@@ -219,53 +274,67 @@ Ocean Proximity:    💻:
 # - show the numbers on the heatmap
 # 
 
-# In[16]:
+# In[ ]:
 
 
-# 💻 Plot the correlation matrix as a heatmap
+plt.figure(figsize=(12, 8))
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', linewidths=0.5)
+plt.title('Correlation Matrix Heatmap')
+plt.show()
 
 
 # #### 6.3: Visualize the correlations between some of the features using a scatter matrix
 # - Plot a scatter matrix for the `total_rooms`, `median_house_age`, `median_income`, and `median_house_value` columns
 
-# In[17]:
+# In[ ]:
 
 
-# 💻 using Pandas Scatter Matrix Plotting, Plot the scatter matrix for (median_house_value, median_income, total_rooms, housing_median_age)
+scatter_matrix(housing[['median_house_value', 'median_income', 'total_rooms', 'housing_median_age']], figsize=(12, 8), alpha=0.1)
+plt.show()
 
 
 # #### 6.4: Visualize the correlations between 2 features using a scatter plot
 # - use an `alpha` value of 0.1
 
-# In[18]:
+# In[ ]:
 
 
-# 💻 Plot the scatter plot for just (median_income and median_house_value)
+housing.plot(kind='scatter', x='median_income', y='median_house_value', alpha=0.1)
+plt.xlabel('Median Income')
+plt.ylabel('Median House Value')
+plt.title('Scatter plot of Median Income vs Median House Value')
+plt.show()
 
 
 # #### 6.5: ❓ What do you notice about the chart? what could that mean?
 # What could the lines of values at the top of the chart mean here?
-💻:
+
+# 💻:The lines of values at the top of the chart could indicate that there is a cap on the median_house_value feature. This suggests that the values might have been clipped at a certain threshold, which could affect the analysis and interpretation of the data.
+
 # > 🚩 This is a good point to commit your code to your repository.
 
 # ### Task 7: Data Cleaning - Duplicate Data
 
 # #### 7.1: Find duplicate data
 
-# In[19]:
+# In[ ]:
 
 
 # 💻 Identify the duplicate data in the dataset
+duplicates = housing[housing.duplicated()]
+duplicates
 
 
 # ### Task 8: Data Cleaning - Missing Data
 
 # #### 8.1: Find missing data
 
-# In[20]:
+# In[ ]:
 
 
 # 💻 Identify the missing data in the dataset
+missing_data = housing.isnull().sum()
+missing_data
 
 
 # #### 8.2: show a sample of 5 records of the rows with missing data
@@ -279,16 +348,18 @@ Ocean Proximity:    💻:
 #   * you'll need to use the `sample()` method to get a sample of 5 records of the results
 # </details>
 
-# In[21]:
+# In[ ]:
 
 
 # 💻 use Pandas Filtering to show all the records with missing `total_bedrooms` field
+missing_total_bedrooms = housing[housing['total_bedrooms'].isnull()]
+missing_total_bedrooms.sample(5)
 
 
 # #### 8.3: Calculate the central tendency values of the missing data feature
 # * Calculate the mean, median, trimmed mean
 
-# In[22]:
+# In[ ]:
 
 
 # 💻 get the mean, median and trimmed mean of the total_bedrooms column
@@ -304,10 +375,15 @@ print(f"Trimmed Mean: {total_bedrooms_trimmed_mean}")
 # #### 8.4: Visualize the distribution of the missing data feature
 # * Plot a histogram of the missing data feature (total_bedrooms)
 
-# In[23]:
+# In[ ]:
 
 
 # 💻 Plot the histogram of the total_bedrooms column
+housing['total_bedrooms'].hist(bins=50, figsize=(10, 6))
+plt.xlabel('Total Bedrooms')
+plt.ylabel('Frequency')
+plt.title('Histogram of Total Bedrooms')
+plt.show()
 
 
 # #### 8.5: Choose one of the central tendency values and use it to fill in the missing data
@@ -317,40 +393,56 @@ print(f"Trimmed Mean: {total_bedrooms_trimmed_mean}")
 # 
 # [📜 You should find a good example here](https://www.sharpsightlabs.com/blog/pandas-fillna/#example-2)
 
-# In[24]:
+# In[ ]:
 
 
-# 💻 Fill the missing values in the total_bedrooms column with an appropriate value, then show the first 5 records of the new dataframe
+# Calculate the median of the total_bedrooms column
+total_bedrooms_median = housing['total_bedrooms'].median()
+
+# Fill the missing values in the total_bedrooms column with the median value
+housing_filled = housing.copy()
+housing_filled['total_bedrooms'] = housing_filled['total_bedrooms'].fillna(total_bedrooms_median)
+
+# Show the first 5 records of the new dataframe
+housing_filled.head()
 
 
 # ❓ Why did you choose this value?
-💻
+
+# 💻I chose the median value to fill in the missing data because it is less affected by outliers compared to the mean. This makes it a more robust measure of central tendency for skewed distributions.
+
 # #### 8.6: Confirm that there are no more missing values in the new dataframe
 # * make sure the dataframe contains all features, not just the `total_bedrooms` feature
 
-# In[25]:
+# In[ ]:
 
 
 # 💻 Confirm the new dataframe has no missing values
+housing_filled.isnull().sum()
 
 
 # #### 8.7: Dropping the missing data
 # assume we didn't want to impute the missing data, and instead, we wanted to drop the rows with missing data.
 # * don't use the `inplace` parameter, instead, create a new dataframe with the updated values.
 
-# In[26]:
+# In[ ]:
 
 
-# 💻 drop the missing rows of the total_bedroom and save it to a new dataframe
+# 💻 drop the missing rows of the total_bedrooms and save it to a new dataframe
+housing_dropped = housing.dropna(subset=['total_bedrooms'])
+
+# Show the first 5 records of the new dataframe
+housing_dropped.head()
 
 
 # #### 8.8: Confirm that there are no more missing values in the new dataframe
 # * make sure the dataframe contains all features, not just the `total_bedrooms` feature
 
-# In[27]:
+# In[ ]:
 
 
 # 💻 Confirm the new dataframe has no missing values
+housing_dropped.isnull().sum()
 
 
 # > 🚩 This is a good point to commit your code to your repository.
@@ -360,7 +452,7 @@ print(f"Trimmed Mean: {total_bedrooms_trimmed_mean}")
 
 # Make sure you run the following cell; this converts this Jupyter notebook to a Python script. and will make the process of reviewing your code on GitHub easier
 
-# In[28]:
+# In[ ]:
 
 
 # 🦉: The following command converts this Jupyter notebook to a Python script.
