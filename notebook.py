@@ -32,7 +32,7 @@ import pandas as pd
 from scipy.stats import trim_mean
 
 # To plot figures
-get_ipython().run_line_magic('matplotlib', 'inline')
+# get_ipython().run_line_magic('matplotlib', 'inline')
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -230,7 +230,10 @@ plt.show()
 # In[ ]:
 
 
-get_ipython().run_line_magic('pip', 'install plotly')
+import subprocess
+import sys
+
+subprocess.check_call([sys.executable, "-m", "pip", "install", "plotly"])
 
 import plotly.express as px
 
@@ -456,7 +459,7 @@ housing_dropped.isnull().sum()
 
 
 # 🦉: The following command converts this Jupyter notebook to a Python script.
-get_ipython().system('jupyter nbconvert --to python notebook.ipynb')
+# get_ipython().system('jupyter nbconvert --to python notebook.ipynb')
 
 
 # > 🚩 **Make sure** you save the notebook and make one final commit here
